@@ -1,0 +1,38 @@
+# Directories
+box/
+docs/
+figures/
+final_figures/
+make_tables/
+results/
+
+# macOS
+.DS_Store
+
+# R
+.Rhistory
+.Rdata
+.RData
+.Rproj.user/
+*.Rproj
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# Data files
+*.h5ad
+*.h5
+*.hdf5
+*.rds
+*.RDS
+*.h5seurat
