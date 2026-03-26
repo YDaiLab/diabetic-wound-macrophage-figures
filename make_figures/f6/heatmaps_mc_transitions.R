@@ -56,8 +56,8 @@ colors <- case_match(
 )
 faces <- case_match(
   rownames(mat),
-  rep_factors ~ "bold",
-  .default = "plain"
+  rep_factors ~ "bold.italic",
+  .default = "italic"
 )
 
 ht_opt$COLOR <- pals::coolwarm(100)

@@ -121,7 +121,7 @@ p1 <- dat_n |>
   geom_text_repel(
     aes(
       label = label_text,
-      fontface = ifelse(factor %in% rep_factors, "bold", "plain")
+      fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
     size = 5 / .pt,
     segment.size = 0.25,
@@ -175,7 +175,7 @@ p2 <- dat_p |>
   geom_text_repel(
     aes(
       label = label_text,
-      fontface = ifelse(factor %in% rep_factors, "bold", "plain")
+      fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
     size = 5 / .pt,
     segment.size = 0.25,
@@ -229,7 +229,7 @@ p3 <- dat2_n |>
   geom_text_repel(
     aes(
       label = label_text,
-      fontface = ifelse(factor %in% rep_factors, "bold", "plain")
+      fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
     size = 5 / .pt,
     segment.size = 0.25,
@@ -283,7 +283,7 @@ p4 <- dat2_p |>
   geom_text_repel(
     aes(
       label = label_text,
-      fontface = ifelse(factor %in% rep_factors, "bold", "plain")
+      fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
     nudge_y = ifelse(dat2_p$factor == "Fli1", -15, 0),
     size = 5 / .pt,

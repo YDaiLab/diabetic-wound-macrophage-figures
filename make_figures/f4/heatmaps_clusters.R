@@ -39,6 +39,7 @@ cells <- ScaleData(cells, assay = "RNA", features = genes)
 mat2 <- GetAssayData(cells, assay = "RNA", layer = "scale.data")
 
 all(colnames(mat1) == colnames(mat2))
+rownames(mat1) <- toupper(rownames(mat1))
 # ----------------------------------------------------------------------
 
 anno_df <- df %>%
@@ -96,7 +97,7 @@ ht1 <- Heatmap(
   show_column_names = FALSE,
   row_names_gp = gpar(fontsize = 5),
   column_order = column_order,
-  row_order = genes,
+  row_order = toupper(genes),
   column_split = anno_df$clusterid,
   column_title_gp = gpar(fontsize = 6),
   column_gap = unit(0.1, "lines"),
@@ -114,7 +115,7 @@ ht1 <- Heatmap(
 )
 
 ht2 <- Heatmap(
-  mat2[rownames(mat1), ],
+  mat2[genes, ],
   use_raster = TRUE,
   raster_quality = 5,
   col = col2,

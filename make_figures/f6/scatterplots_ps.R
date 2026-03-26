@@ -105,7 +105,7 @@ p1 <- dat_n %>%
   geom_text_repel(
     aes(
       label = label_text,
-      fontface = ifelse(factor %in% rep_factors, "bold", "plain")
+      fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
     nudge_x = case_match(
       dat_n$factor, "Kdm1a" ~ 25,
@@ -166,7 +166,7 @@ p2 <- dat_p %>%
   geom_text_repel(
     aes(
       label = label_text,
-      fontface = ifelse(factor %in% rep_factors, "bold", "plain")
+      fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
     nudge_x = ifelse(dat_p$factor == "Kdm1a", 25, 0),
     nudge_y = case_match(

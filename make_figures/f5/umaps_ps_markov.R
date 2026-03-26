@@ -163,10 +163,11 @@ df_change <- bin_counts(df_500) %>%
   ) %>%
   filter(delta != 0)
 
-asinh_lim <- max(abs(asinh(df_change$delta)))
+asinh_scale <- 50
+asinh_lim <- max(abs(asinh(df_change$delta / asinh_scale)))
 
 p2 <- df_change %>%
-  ggplot(aes(x, y, fill = asinh(delta))) +
+  ggplot(aes(x, y, fill = asinh(delta / asinh_scale))) +
   geom_tile(
     width = diff(x_breaks)[1],
     height = diff(y_breaks)[1]
@@ -224,7 +225,7 @@ p2 <- df_change %>%
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
-    fill = expression(asinh(Delta ~ count))
+    fill = expression(asinh(Delta ~ count / 50))
   ) +
   theme(
     axis.title = element_text(size = 5),

@@ -1,0 +1,8 @@
+source("make_tables/mk_s1.R")
+source("make_tables/mk_s2.R")
+source("make_tables/mk_s3.R")
+source("make_tables/mk_s4.R")
+source("make_tables/mk_s5.R")
+source("make_tables/mk_s6.R")
+source("make_tables/mk_s7.R")
+source("make_tables/mk_s8.R")

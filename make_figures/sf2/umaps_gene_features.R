@@ -32,6 +32,8 @@ class <- c(
 class <- fct_inorder(class)
 
 class_genes <- setNames(class, genes)
+genes_upper <- toupper(genes)
+class_genes_upper <- setNames(class, genes_upper)
 # ----------------------------------------------------------------------
 get_data <- function(df, mat) {
   require(dplyr)
@@ -59,8 +61,10 @@ mat <- GetAssayData(cells, assay = "Z_avg", layer = "scale.data")
 # ----------------------------------------------------------------------
 df <- load_df()
 df_pgd <- load_df(pgd = T)
-dat <- get_data(df, mat)
-dat_pgd <- get_data(df_pgd, mat)
+dat <- get_data(df, mat) %>%
+  mutate(gene = factor(toupper(gene), genes_upper))
+dat_pgd <- get_data(df_pgd, mat) %>%
+  mutate(gene = factor(toupper(gene), genes_upper))
 
 p1 <- dat %>%
   arrange(abs(value)) %>%
@@ -75,7 +79,7 @@ p1 <- dat %>%
     bg.color = "#fff",
     size = 5 / .pt
   ) +
-  facet_nested_wrap(~ class_genes[gene] + gene,
+  facet_nested_wrap(~ class_genes_upper[gene] + gene,
     axes = "all",
     nrow = 1,
     strip = strip_nested(
@@ -125,7 +129,7 @@ p2 <- dat_pgd %>%
     bg.color = "#fff",
     size = 5 / .pt
   ) +
-  facet_nested_wrap(~ class_genes[gene] + gene,
+  facet_nested_wrap(~ class_genes_upper[gene] + gene,
     axes = "all",
     nrow = 1,
     strip = strip_nested(

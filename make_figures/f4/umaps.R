@@ -18,6 +18,7 @@ class <- c("Early-stage", "", "Late-stage", "", "APC-like", "")
 class <- factor(class, c("Early-stage", "Late-stage", "APC-like", ""))
 
 class_genes <- setNames(class, genes)
+class_genes_upper <- setNames(class, toupper(genes))
 # ----------------------------------------------------------------------
 get_data <- function(df, mat) {
   require(dplyr)
@@ -47,7 +48,8 @@ cells <- ScaleData(cells, assay = "RNA", features = genes, scale.max = 2.5)
 mat2 <- GetAssayData(cells, assay = "RNA", layer = "scale.data")
 # ----------------------------------------------------------------------
 df <- load_df(pgd = TRUE)
-dat1 <- get_data(df, mat1)
+dat1 <- get_data(df, mat1) %>%
+  mutate(gene = factor(toupper(gene), toupper(genes)))
 dat2 <- get_data(df, mat2)
 
 p1 <- dat1 %>%
@@ -64,7 +66,7 @@ p1 <- dat1 %>%
     size = 5 / .pt
   ) +
   facet_wrap2(
-    ~ class_genes[gene] + gene,
+    ~ class_genes_upper[gene] + gene,
     axes = "all",
     nrow = 2,
     strip = strip_nested(
