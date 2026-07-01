@@ -9,5 +9,5 @@ sheets <- list(
   "TDE_Pathway_Enrichment" = df2
 )
 
-output_file <- get_table_path("Table S3", "lamian_tde.xlsx")
+output_file <- get_table_path(3, "trajectory_de_genes.xlsx")
 writexl::write_xlsx(sheets, output_file)

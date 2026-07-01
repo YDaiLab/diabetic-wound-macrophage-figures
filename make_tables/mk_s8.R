@@ -22,5 +22,5 @@ mat <- bind_rows(
   ) %>%
   select(factor, clusterid, pct_change)
 
-output_file <- get_table_path("Table S8", "markov_overexpression.csv")
+output_file <- get_table_path(8, "markov_overexpression_transitions.csv")
 write_csv(mat, output_file)

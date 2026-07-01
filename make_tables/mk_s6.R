@@ -24,5 +24,5 @@ df <- GetAssayData(dat) |>
   ) |>
   mutate(cluster = gsub("g", "", cluster))
 
-output_file <- get_table_path("Table S6", "pseudobulk_tf_expression.csv")
+output_file <- get_table_path(6, "cluster_pseudobulk_tr_expression.csv")
 write_csv(df, output_file)

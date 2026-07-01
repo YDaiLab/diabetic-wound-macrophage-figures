@@ -18,14 +18,14 @@ def reorder_columns(df, first_cols=["gene", "cluster"]):
 df_ovr = pd.read_csv(Path(input_dir) / "findallmarkers.csv")
 df_ovr = reorder_columns(df_ovr)
 
-df_dbvwt = pd.read_csv(Path(input_dir) / "find_de.csv")
-df_dbvwt = reorder_columns(df_dbvwt)
+df_dbvnd = pd.read_csv(Path(input_dir) / "find_de.csv")
+df_dbvnd = reorder_columns(df_dbvnd)
 
 df = pd.merge(
     df_ovr,
-    df_dbvwt,
+    df_dbvnd,
     on=["gene", "cluster"],
-    suffixes=("_ovr", "_db_v_wt"),
+    suffixes=("_ovr", "_db_v_nd"),
     how="outer",
 )
 df = reorder_columns(df)
@@ -34,5 +34,5 @@ df = reorder_columns(df)
 Path(output_file).parent.mkdir(parents=True, exist_ok=True)
 with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
     df_ovr.to_excel(writer, sheet_name="one_vs_rest", index=False)
-    df_dbvwt.to_excel(writer, sheet_name="db_vs_wt", index=False)
+    df_dbvnd.to_excel(writer, sheet_name="db_vs_nd", index=False)
     df.to_excel(writer, sheet_name="combined", index=False)

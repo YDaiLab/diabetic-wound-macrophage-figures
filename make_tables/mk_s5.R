@@ -25,5 +25,5 @@ df <- lapply(names(res), function(x) {
   bind_rows() |>
   as_tibble()
 
-output_file <- get_table_path("Table S5", "lamian_tde.csv")
+output_file <- get_table_path(5, "trajectory_da_trs.csv")
 write_csv(df, output_file)

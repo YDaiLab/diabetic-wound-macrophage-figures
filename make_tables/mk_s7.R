@@ -22,5 +22,5 @@ mat <- bind_rows(
   ) %>%
   select(factor, clusterid, pct_change)
 
-output_file <- get_table_path("Table S7", "markov_ko.csv")
+output_file <- get_table_path(7, "markov_knockout_transitions.csv")
 write_csv(mat, output_file)
