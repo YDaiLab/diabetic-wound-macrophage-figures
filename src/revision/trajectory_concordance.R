@@ -18,10 +18,11 @@ library(tidyverse)
 # numbering; everything is anchored on cell ids and the joint clusterid.
 # Lightweight, so it lives in moma. Reads the .rds trees synced from macrophages.
 # ----------------------------------------------------------------------
+# Variant C — condition-specific PC space (the "most independent" re-inference).
 joint_file <- "box/results/lamian/infer_tree.rds"
 cond_files <- c(
-  wt = "box/results/revision/lamian/wt/infer_tree.rds",
-  db = "box/results/revision/lamian/db/infer_tree.rds"
+  wt = "box/results/revision/lamian_condpca/wt/infer_tree.rds",
+  db = "box/results/revision/lamian_condpca/db/infer_tree.rds"
 )
 out_pt <- "results/revision/concordance_pseudotime.csv"
 out_branch <- "results/revision/concordance_branch_crosstab.csv"

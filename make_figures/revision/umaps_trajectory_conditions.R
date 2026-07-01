@@ -9,34 +9,32 @@ library(colorspace)
 
 theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
 
-# Revision task T1 / R2-2 (editor-flagged) — per-condition trajectory on the
-# shared PGD layout, to show the joint ND+DB trajectory reproduces when each
-# condition is inferred independently.
+# Revision task T1 / R2-2 (editor-flagged) — Variant C figure: per-condition
+# trajectory inferred in a CONDITION-SPECIFIC PC space, shown on the shared PGD
+# layout so occupancy/pseudotime stay visually comparable.
 #
 #   Reference (joint ND+DB)  |  Non-diabetic (wt)  |  Diabetic (db)
 #   row 1: clusters + branch backbone
 #   row 2: pseudotime + branch backbone
 #
-# All three columns share the fixed PGD layout (umap_1/umap_2 from load_df), so
-# occupancy/pseudotime are visually comparable. The wt/db columns use each
-# condition's OWN independently-inferred clusters, pseudotime and branches
-# (self-consistent per condition) — the quantitative cross-condition agreement is
-# in src/revision/trajectory_concordance.R. Cells of the other condition are
-# drawn as light-grey background so the shared canvas stays legible.
+# The wt/db columns use each condition's OWN independently-inferred clusters,
+# pseudotime and branches; quantitative cross-condition agreement is in
+# src/revision/trajectory_concordance.R. Cells of the other condition are drawn
+# as light-grey background so the shared canvas stays legible.
 #
-# NOTE (design choice to confirm): condition panels colour by the per-condition
-# k-means clusters. For direct colour comparability instead, colour the condition
-# panels by the joint `clusterid` (cluster_pal) and drop the per-condition labels.
+# Edges are built from names(res$order) (branch cluster sequences), NOT from
+# load_edge_tbl()'s parsing of detection.rate rownames — the latter silently
+# yields ZERO edges for some trees (e.g. db, whose detection.rate has bare
+# integer rownames instead of "c(a,b)" node strings).
 # ----------------------------------------------------------------------
 output_dir <- "figures/revision"
 source("make_figures/cfg.R")
-source("make_figures/load_edge_tbl.R")
 
-joint_tree_file <- "box/results/lamian/evaluate_uncertainty.rds"
+joint_res_file <- "box/results/lamian/infer_tree.rds"
 cond_meta <- tribble(
-  ~cond, ~label,             ~condition,       ~tree_file,                                           ~res_file,
-  "wt",  "Non-diabetic",     "Non-diabetic",   "box/results/revision/lamian/wt/evaluate_uncertainty.rds", "box/results/revision/lamian/wt/infer_tree.rds",
-  "db",  "Diabetic",         "Diabetic",       "box/results/revision/lamian/db/evaluate_uncertainty.rds", "box/results/revision/lamian/db/infer_tree.rds"
+  ~cond, ~label,          ~condition,      ~res_file,
+  "wt",  "Non-diabetic",  "Non-diabetic",  "box/results/revision/lamian_condpca/wt/infer_tree.rds",
+  "db",  "Diabetic",      "Diabetic",      "box/results/revision/lamian_condpca/db/infer_tree.rds"
 )
 # ----------------------------------------------------------------------
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
@@ -47,6 +45,28 @@ median_xy <- function(d, group) {
   d %>%
     group_by(clusterid = .data[[group]]) %>%
     summarise(umap_1 = median(umap_1), umap_2 = median(umap_2), .groups = "drop")
+}
+
+# Robust backbone edges: parse the branch cluster sequences from names(res$order)
+# and place each node at the median layout coord of its cells (`df$clusterid`
+# must hold the same node labels the tree uses).
+edge_tbl_from_order <- function(res, d) {
+  seqs <- lapply(names(res$order), function(nm) as.integer(str_extract_all(nm, "[0-9]+")[[1]]))
+  edges <- bind_rows(lapply(seqs, function(v) {
+    if (length(v) >= 2) tibble(source = v[-length(v)], target = v[-1]) else NULL
+  })) %>% distinct()
+  ctr <- d %>%
+    mutate(node = as.integer(as.character(clusterid))) %>%
+    group_by(node) %>%
+    summarise(x = median(umap_1), y = median(umap_2), .groups = "drop")
+  mx <- setNames(ctr$x, ctr$node)
+  my <- setNames(ctr$y, ctr$node)
+  edges %>%
+    mutate(
+      x = mx[as.character(source)], y = my[as.character(source)],
+      xend = mx[as.character(target)], yend = my[as.character(target)]
+    ) %>%
+    filter(!is.na(x), !is.na(xend))
 }
 
 theme_panel <- theme_dimred2(arrow = arrow) +
@@ -71,8 +91,8 @@ labels_layer <- function(label_df) {
 }
 
 # ---- reference (joint) ------------------------------------------------------
-joint_tree <- readRDS(joint_tree_file)
-edge_joint <- load_edge_tbl(joint_tree, df)
+joint_res <- readRDS(joint_res_file)
+edge_joint <- edge_tbl_from_order(joint_res, df)
 
 p_ref_cl <- ggplot(df, aes(umap_1, umap_2)) +
   rasterise(geom_point(aes(color = clusterid), stroke = 0, size = 0.4), dpi = 900) +
@@ -88,14 +108,14 @@ p_ref_pt <- ggplot(df, aes(umap_1, umap_2)) +
   labs(title = "Reference (joint ND+DB)", x = expression("UMAP"[1]), y = expression("UMAP"[2])) +
   theme_panel
 
-# ---- per-condition ----------------------------------------------------------
-cond_panels <- pmap(cond_meta, function(cond, label, condition, tree_file, res_file) {
+# ---- per-condition (condition-specific PCA) ---------------------------------
+cond_panels <- pmap(cond_meta, function(cond, label, condition, res_file) {
   res <- readRDS(res_file)
-  tree <- readRDS(tree_file)
 
   cl <- enframe(res$clusterid, name = "Row.names", value = "cl_cond") %>%
     mutate(cl_cond = fct_inseq(as.character(cl_cond)))
-  pt <- enframe(res$pseudotime, name = "Row.names", value = "pt_cond")
+  pt <- enframe(res$pseudotime, name = "Row.names", value = "pt_cond") %>%
+    distinct(Row.names, .keep_all = TRUE) # order() repeats shared backbone cells
 
   bg <- df %>% filter(condition != !!condition)
   fg <- df %>%
@@ -103,8 +123,7 @@ cond_panels <- pmap(cond_meta, function(cond, label, condition, tree_file, res_f
     left_join(cl, by = "Row.names") %>%
     left_join(pt, by = "Row.names")
 
-  # per-condition backbone: reuse load_edge_tbl by making clusterid = cl_cond
-  edges <- load_edge_tbl(tree, fg %>% mutate(clusterid = cl_cond))
+  edges <- edge_tbl_from_order(res, fg %>% mutate(clusterid = cl_cond))
   cond_pal <- setNames(
     scales::hue_pal()(nlevels(fg$cl_cond)), levels(fg$cl_cond)
   )
