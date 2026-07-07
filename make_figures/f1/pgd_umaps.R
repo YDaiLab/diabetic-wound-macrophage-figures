@@ -1,10 +1,11 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
+source("assets/theme_embedding.R")
 library(ggarrow)
 library(ggarchery)
 library(ggrastr)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 6))
+theme_set(theme_nature(base_size = fs_small))
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f1"
@@ -55,13 +56,12 @@ p <- df |>
     palette = "YlGnBu",
     direction = 1,
     guide = guide_colorbar(
-      reverse = TRUE,
       theme = theme(
         legend.key.width = unit(0.3, "lines"),
         legend.key.height = unit(1, "lines"),
-        legend.text = element_text(size = 5),
+        legend.text = element_text(size = fs_min),
         legend.ticks = element_blank(),
-        legend.title = element_text(size = 5, hjust = 0.5, margin = margin(b = 7)),
+        legend.title = element_text(size = fs_min, hjust = 0.5, margin = margin(b = 7)),
         legend.title.position = "top",
       )
     ),
@@ -73,7 +73,7 @@ p <- df |>
     y = NULL,
     color = "Pseudotime"
   ) +
-  theme_dimred2(arrow = arrow, axis = axis) +
+  theme_embedding(arrow = arrow, axis = axis) +
   theme(
     axis.line = element_blank(),
     panel.spacing.y = unit(2, "lines"),

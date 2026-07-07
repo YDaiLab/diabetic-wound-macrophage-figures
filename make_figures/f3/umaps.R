@@ -1,5 +1,6 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
+source("assets/theme_embedding.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -9,7 +10,7 @@ library(ggarrow)
 library(ggarchery)
 library(ggrastr)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f3"
@@ -60,7 +61,7 @@ p1 <- df %>%
       summarise_if(is.numeric, median),
     color = "#000",
     bg.color = "#fff",
-    size = 7 / .pt
+    size = pt2mm(fs_base)
   ) +
   colorspace::scale_color_continuous_sequential(
     palette = "Grays", rev = TRUE, begin = 0.3,
@@ -73,16 +74,16 @@ p1 <- df %>%
       )
     )
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
     color = "Detection rate"
   ) +
   theme(
-    axis.title = element_text(size = 6),
-    legend.title = element_text(size = 6.75, hjust = 0.5, margin = margin(b = 7)),
-    legend.text = element_text(size = 6),
+    axis.title = element_text(size = fs_small),
+    legend.title = element_text(size = fs_base, hjust = 0.5, margin = margin(b = 7)),
+    legend.text = element_text(size = fs_small),
     legend.position = "inside",
     legend.justification = c(-0.2, 1.4),
     legend.margin = margin(0, 0, 0, 0)
@@ -97,7 +98,6 @@ p2 <- df %>%
     breaks = c(range(df$pseudotime), median(df$pseudotime)),
     labels = c("Early", "Late", "Middle"),
     guide = guide_colorbar(
-      reverse = TRUE,
       theme = theme(
         legend.key.height = unit(1.5, "lines"),
         legend.key.width = unit(0.4, "lines")
@@ -129,21 +129,21 @@ p2 <- df %>%
       summarise_if(is.numeric, median),
     color = "#000",
     bg.color = "#fff",
-    size = 7 / .pt
+    size = pt2mm(fs_base)
   ) +
   colorspace::scale_color_continuous_sequential(
     palette = "Grays", rev = TRUE, begin = 0.3
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
     color = "Detection rate"
   ) +
   theme(
-    axis.title = element_text(size = 6),
-    legend.title = element_text(size = 6.75, hjust = 0.5, margin = margin(b = 7)),
-    legend.text = element_text(size = 6),
+    axis.title = element_text(size = fs_small),
+    legend.title = element_text(size = fs_base, hjust = 0.5, margin = margin(b = 7)),
+    legend.text = element_text(size = fs_small),
     legend.position = "inside",
     legend.justification = c(-0.2, 1.4),
     legend.margin = margin(0, 0, 0, 0)
