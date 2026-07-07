@@ -1,12 +1,13 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
+source("assets/theme_embedding.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
 library(shadowtext)
 library(ggrastr)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f2"
@@ -20,7 +21,7 @@ p1 <- df %>%
   ggplot(aes(umap_1, umap_2)) +
   geom_point_rast(aes(color = sample), size = 0.3, stroke = 0, raster.dpi = 600) +
   scale_color_manual(values = sample_pal) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
@@ -35,7 +36,7 @@ p1 <- df %>%
     )
   ) +
   theme(
-    axis.title = element_text(size = 6),
+    axis.title = element_text(size = fs_small),
     legend.text.position = c("top", "left"),
     legend.position = "top",
     legend.justification = "left",
@@ -56,10 +57,10 @@ p2 <- df %>%
       summarise_if(is.numeric, median),
     color = "#000",
     bg.color = "#fff",
-    size = 7 / .pt
+    size = pt2mm(fs_base)
   ) +
   scale_color_manual(values = cluster_pal) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
@@ -72,7 +73,7 @@ p2 <- df %>%
   ) +
   theme(
     legend.position = "none",
-    axis.title = element_text(size = 6)
+    axis.title = element_text(size = fs_small)
   )
 
 combined <- p1 + plot_spacer() + p2 +

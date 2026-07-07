@@ -1,12 +1,13 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
+source("assets/theme_embedding.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
 library(shadowtext)
 library(ggrastr)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f4"
@@ -63,7 +64,7 @@ p1 <- dat1 %>%
       summarise_if(is.numeric, median),
     color = "#000",
     bg.color = "#fff",
-    size = 5 / .pt
+    size = pt2mm(fs_min)
   ) +
   facet_wrap2(
     ~ class_genes_upper[gene] + gene,
@@ -96,19 +97,19 @@ p1 <- dat1 %>%
       )
     )
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
     color = "Scaled\nactivity"
   ) +
   theme(
-    axis.title = element_text(size = 5),
-    legend.text = element_text(size = 5),
+    axis.title = element_text(size = fs_min),
+    legend.text = element_text(size = fs_min),
     legend.justification = "top",
-    legend.title = element_text(size = 5.5),
+    legend.title = element_text(size = fs_min),
     legend.margin = margin(),
-    strip.text = element_text(size = 6),
+    strip.text = element_text(size = fs_small),
     ggh4x.facet.nestline = element_line(linewidth = 0.2),
     panel.spacing.y = unit(0, "lines")
   )
@@ -124,7 +125,7 @@ p2 <- dat2 %>%
       summarise_if(is.numeric, median),
     color = "#000",
     bg.color = "#fff",
-    size = 5 / .pt
+    size = pt2mm(fs_min)
   ) +
   facet_wrap2(
     ~ class_genes[gene] + gene,
@@ -169,19 +170,19 @@ p2 <- dat2 %>%
       )
     )
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
     color = "Scaled\nexpression"
   ) +
   theme(
-    axis.title = element_text(size = 5),
-    legend.text = element_text(size = 5),
-    legend.title = element_text(size = 5.5),
+    axis.title = element_text(size = fs_min),
+    legend.text = element_text(size = fs_min),
+    legend.title = element_text(size = fs_min),
     legend.margin = margin(),
     legend.justification = "top",
-    strip.text = element_text(size = 6),
+    strip.text = element_text(size = fs_small),
     ggh4x.facet.nestline = element_line(linewidth = 0.2),
     panel.spacing.y = unit(0, "lines")
   )

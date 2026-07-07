@@ -1,5 +1,5 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -9,7 +9,7 @@ library(ggarrow)
 library(ggarchery)
 library(ggrepel)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f3"
@@ -66,7 +66,7 @@ p <- dat %>%
     aes(label = clusterid, y = 1),
     dat_l,
     max.iter = 0,
-    size = 6.5 / .pt,
+    size = pt2mm(fs_small),
     color = "#000",
     bg.color = "#fff"
   ) +
@@ -87,8 +87,8 @@ p <- dat %>%
     scales = "free",
     strip = strip_nested(
       text_x = list(
-        element_text(size = 6.75, hjust = 0.5),
-        element_text(size = 6.75, hjust = 0.5, margin = margin(t = 3, b = 6))
+        element_text(size = fs_base, hjust = 0.5),
+        element_text(size = fs_base, hjust = 0.5, margin = margin(t = 3, b = 6))
       ),
       by_layer_x = TRUE
     )
@@ -103,12 +103,12 @@ p <- dat %>%
     color = ""
   ) +
   theme(
-    axis.text = element_text(size = 6),
+    axis.text = element_text(size = fs_small),
     legend.position = "top",
     legend.justification = "left",
     legend.location = "plot",
     legend.text.position = "right",
-    legend.text = element_text(size = 6.75),
+    legend.text = element_text(size = fs_base),
     legend.margin = margin(),
     legend.key.spacing = rel(1),
     legend.key.height = unit(2, "mm"),

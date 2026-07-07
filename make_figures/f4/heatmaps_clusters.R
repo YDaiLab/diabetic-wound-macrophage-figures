@@ -1,5 +1,5 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -8,7 +8,7 @@ library(Seurat)
 library(ComplexHeatmap)
 library(circlize)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 ht_opt$annotation_use_raster <- TRUE
 
 # ----------------------------------------------------------------------
@@ -60,8 +60,8 @@ top_anno <- HeatmapAnnotation(
   annotation_legend_param = list(
     sample = list(
       title = "Sample",
-      title_gp = gpar(fontsize = 6),
-      labels_gp = gpar(fontsize = 6)
+      title_gp = gpar(fontsize = fs_small),
+      labels_gp = gpar(fontsize = fs_small)
     )
   ),
   show_annotation_name = FALSE,
@@ -95,11 +95,11 @@ ht1 <- Heatmap(
   top_annotation = top_anno,
   show_row_names = TRUE,
   show_column_names = FALSE,
-  row_names_gp = gpar(fontsize = 5),
+  row_names_gp = gpar(fontsize = fs_min),
   column_order = column_order,
   row_order = toupper(genes),
   column_split = anno_df$clusterid,
-  column_title_gp = gpar(fontsize = 6),
+  column_title_gp = gpar(fontsize = fs_small),
   column_gap = unit(0.1, "lines"),
   row_names_side = "left",
   heatmap_legend_param = list(
@@ -109,8 +109,8 @@ ht1 <- Heatmap(
     direction = "horizontal",
     at = c(-2, 0, 2),
     labels = paste0("\n", c(-2, 0, 2)),
-    title_gp = gpar(fontsize = 6),
-    labels_gp = gpar(fontsize = 5)
+    title_gp = gpar(fontsize = fs_small),
+    labels_gp = gpar(fontsize = fs_min)
   )
 )
 
@@ -122,11 +122,11 @@ ht2 <- Heatmap(
   top_annotation = top_anno,
   show_row_names = TRUE,
   show_column_names = FALSE,
-  row_names_gp = gpar(fontsize = 5, fontface = "italic"),
+  row_names_gp = gpar(fontsize = fs_min, fontface = "italic"),
   column_order = column_order,
   row_order = genes,
   column_split = anno_df$clusterid,
-  column_title_gp = gpar(fontsize = 6),
+  column_title_gp = gpar(fontsize = fs_small),
   column_gap = unit(0.1, "lines"),
   row_names_side = "left",
   heatmap_legend_param = list(
@@ -136,8 +136,8 @@ ht2 <- Heatmap(
     direction = "horizontal",
     at = c(-2, 0, 2),
     labels = paste0("\n", c(-2, 0, 2)),
-    title_gp = gpar(fontsize = 6),
-    labels_gp = gpar(fontsize = 5)
+    title_gp = gpar(fontsize = fs_small),
+    labels_gp = gpar(fontsize = fs_min)
   )
 )
 
@@ -168,8 +168,8 @@ lgd_sample <- Legend(
   labels = names(sample_pal),
   title = "Sample",
   legend_gp = gpar(fill = sample_pal),
-  title_gp = gpar(fontsize = 6),
-  labels_gp = gpar(fontsize = 5.5),
+  title_gp = gpar(fontsize = fs_small),
+  labels_gp = gpar(fontsize = fs_min),
   grid_height = unit(0.5, "lines"),
   grid_width = unit(0.5, "lines")
 )
@@ -182,8 +182,8 @@ lgd_activity <- Legend(
   direction = "horizontal",
   grid_height = unit(0.4, "lines"),
   legend_width = unit(2, "lines"),
-  title_gp = gpar(fontsize = 6),
-  labels_gp = gpar(fontsize = 5)
+  title_gp = gpar(fontsize = fs_small),
+  labels_gp = gpar(fontsize = fs_min)
 )
 
 lgd_expression <- Legend(
@@ -194,8 +194,8 @@ lgd_expression <- Legend(
   direction = "horizontal",
   grid_height = unit(0.4, "lines"),
   legend_width = unit(2, "lines"),
-  title_gp = gpar(fontsize = 6),
-  labels_gp = gpar(fontsize = 5)
+  title_gp = gpar(fontsize = fs_small),
+  labels_gp = gpar(fontsize = fs_min)
 )
 
 leg <- grid.grabExpr(

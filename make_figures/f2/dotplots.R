@@ -1,5 +1,5 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -8,7 +8,7 @@ library(colorspace)
 library(ggnewscale)
 library(Seurat)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f2"
@@ -91,7 +91,7 @@ p <- dat %>%
   #     label = sig,
   #     color = text_color
   #   ),
-  #   vjust = 0.75, size = 5 / .pt
+  #   vjust = 0.75, size = pt2mm(fs_min)
   # ) +
   # scale_color_identity() +
   scale_size_area(
@@ -102,9 +102,9 @@ p <- dat %>%
   ) +
   scale_y_discrete(limits = rev) +
   theme(
-    axis.text.y = element_text(face = "italic", size = 6),
-    legend.text = element_text(size = 6, hjust = 0.5),
-    legend.title = element_text(size = 6, hjust = 0.5),
+    axis.text.y = element_text(face = "italic", size = fs_small),
+    legend.text = element_text(size = fs_small, hjust = 0.5),
+    legend.title = element_text(size = fs_small, hjust = 0.5),
     legend.position = "bottom",
     legend.location = "panel",
     legend.justification = "left",

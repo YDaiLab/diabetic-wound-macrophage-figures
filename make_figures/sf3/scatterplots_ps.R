@@ -1,12 +1,12 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
 library(shadowtext)
 library(ggrepel)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 # ----------------------------------------------------------------------
 output_dir <- "figures/sf3"
 source("make_figures/cfg.R")
@@ -123,7 +123,7 @@ p1 <- dat_n |>
       label = label_text,
       fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
-    size = 5 / .pt,
+    size = pt2mm(fs_min),
     segment.size = 0.25,
     max.overlaps = Inf,
     min.segment.length = 0,
@@ -137,9 +137,9 @@ p1 <- dat_n |>
   ) +
   coord_fixed(clip = "off", xlim = lim_n, ylim = lim_n) +
   theme(
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = fs_min),
     axis.title = element_text(
-      size = 6,
+      size = fs_small,
       color = RColorBrewer::brewer.pal(8, "PiYG")[1]
     )
   )
@@ -177,7 +177,7 @@ p2 <- dat_p |>
       label = label_text,
       fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
-    size = 5 / .pt,
+    size = pt2mm(fs_min),
     segment.size = 0.25,
     max.overlaps = Inf,
     min.segment.length = 0,
@@ -191,9 +191,9 @@ p2 <- dat_p |>
   ) +
   coord_fixed(clip = "off", xlim = lim_p, ylim = lim_p) +
   theme(
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = fs_min),
     axis.title = element_text(
-      size = 6,
+      size = fs_small,
       color = RColorBrewer::brewer.pal(8, "PiYG")[8]
     )
   )
@@ -231,7 +231,7 @@ p3 <- dat2_n |>
       label = label_text,
       fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
-    size = 5 / .pt,
+    size = pt2mm(fs_min),
     segment.size = 0.25,
     max.overlaps = Inf,
     min.segment.length = 0,
@@ -245,9 +245,9 @@ p3 <- dat2_n |>
   ) +
   coord_fixed(clip = "off", xlim = lim2_n, ylim = lim2_n) +
   theme(
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = fs_min),
     axis.title = element_text(
-      size = 6,
+      size = fs_small,
       color = RColorBrewer::brewer.pal(8, "PiYG")[1]
     )
   )
@@ -286,7 +286,7 @@ p4 <- dat2_p |>
       fontface = ifelse(factor %in% rep_factors, "bold.italic", "italic")
     ),
     nudge_y = ifelse(dat2_p$factor == "Fli1", -15, 0),
-    size = 5 / .pt,
+    size = pt2mm(fs_min),
     segment.size = 0.25,
     max.overlaps = Inf,
     min.segment.length = 0,
@@ -302,9 +302,9 @@ p4 <- dat2_p |>
   scale_y_continuous(breaks = c(0, 25, 50, 75)) +
   coord_fixed(clip = "off", xlim = lim2_p, ylim = lim2_p) +
   theme(
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = fs_min),
     axis.title = element_text(
-      size = 6,
+      size = fs_small,
       color = RColorBrewer::brewer.pal(8, "PiYG")[8]
     )
   )
@@ -315,7 +315,7 @@ combined_ko <- p1 + plot_spacer() + p2 +
   plot_annotation(
     title = "KO analysis",
     theme = theme(
-      plot.title = element_text(size = 7, margin = margin(t = 3), hjust = 0.5)
+      plot.title = element_text(size = fs_base, margin = margin(t = 3), hjust = 0.5)
     )
   ) &
   theme(plot.margin = margin(0, 0, 0, 0))
@@ -328,7 +328,7 @@ combined_oe <- p3 + plot_spacer() + p4 +
   plot_annotation(
     title = "Overexpression analysis",
     theme = theme(
-      plot.title = element_text(size = 7, margin = margin(t = 3), hjust = 0.5)
+      plot.title = element_text(size = fs_base, margin = margin(t = 3), hjust = 0.5)
     )
   ) &
   theme(plot.margin = margin(0, 0, 0, 0))

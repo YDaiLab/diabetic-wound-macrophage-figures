@@ -1,11 +1,11 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
 library(colorspace)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f2"
@@ -76,7 +76,7 @@ p <- res %>%
       ),
       color = text_color
     ),
-    size = 5 / .pt
+    size = pt2mm(fs_min)
   ) +
   scale_color_identity() +
   scale_fill_gradientn(
@@ -97,9 +97,9 @@ p <- res %>%
     fill = "Normalized enrichment score"
   ) +
   theme(
-    axis.text.y = element_text(size = 6.5),
-    legend.text = element_text(size = 6),
-    legend.title = element_text(size = 6, hjust = 0.5),
+    axis.text.y = element_text(size = fs_small),
+    legend.text = element_text(size = fs_small),
+    legend.title = element_text(size = fs_small, hjust = 0.5),
     legend.position = "bottom",
     legend.location = "panel",
     legend.justification = "center",

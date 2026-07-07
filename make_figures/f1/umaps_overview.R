@@ -1,5 +1,6 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
+source("assets/theme_embedding.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -8,7 +9,7 @@ library(ggarrow)
 library(ggarchery)
 library(ggrastr)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 6))
+theme_set(theme_nature(base_size = fs_small))
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f1"
@@ -46,7 +47,7 @@ p <- df %>%
     axis.line = element_line(linewidth = 0.2),
     plot.margin = margin(0, 0, 0, 0)
   ) +
-  theme_dimred2(arrow = arrow, axis = axis) +
+  theme_embedding(arrow = arrow, axis = axis) +
   theme(axis.line = element_blank())
 
 save_figure(output_dir, "umaps_sample", plot = p, width = 0.9, height = 0.9)
@@ -80,7 +81,7 @@ p <- df %>%
     axis.line = element_line(linewidth = 0.2),
     plot.margin = margin(0, 0, 0, 0)
   ) +
-  theme_dimred2(arrow = arrow, axis = axis) +
+  theme_embedding(arrow = arrow, axis = axis) +
   theme(axis.line = element_blank())
 
 save_figure(output_dir, "umaps_clusters_trajectory", plot = p, width = 0.9, height = 0.9)

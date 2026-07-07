@@ -1,5 +1,6 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
+source("assets/theme_embedding.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -10,7 +11,7 @@ library(ggarrow)
 library(ggarchery)
 library(ggrastr)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 options(ggrepel.max.overlaps = 6)
 # ----------------------------------------------------------------------
 output_dir <- "figures/f5"
@@ -78,7 +79,7 @@ p1 <- df_ps %>%
     ),
     labeller = labeller(factor = function(x) sprintf("*%s* KO", x))
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   geom_arrow_segment(
     aes(
       x = x,
@@ -100,7 +101,7 @@ p1 <- df_ps %>%
       summarise_if(is.numeric, median),
     color = "#000",
     bg.color = "#fff",
-    size = 5 / .pt
+    size = pt2mm(fs_min)
   ) +
   labs(
     x = expression("UMAP"[1]),
@@ -108,14 +109,14 @@ p1 <- df_ps %>%
     color = "Perturbation score (PS)"
   ) +
   theme(
-    axis.title = element_text(size = 5),
-    legend.title = element_text(size = 6, vjust = 0.95),
-    legend.text = element_text(size = 6),
+    axis.title = element_text(size = fs_min),
+    legend.title = element_text(size = fs_small, vjust = 0.95),
+    legend.text = element_text(size = fs_small),
     legend.position = "bottom",
     legend.title.position = "left",
     legend.text.position = "bottom",
     legend.margin = margin(),
-    strip.text = element_text(size = 6)
+    strip.text = element_text(size = fs_small)
   )
 
 # --- Markov chain transitions (p2) ---
@@ -194,7 +195,7 @@ p2 <- df_change %>%
     ),
     labeller = labeller(factor = function(x) sprintf("*%s* KO", x))
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   geom_arrow_segment(
     aes(
       x = x,
@@ -218,7 +219,7 @@ p2 <- df_change %>%
       summarise_if(is.numeric, median),
     color = "#000",
     bg.color = "#fff",
-    size = 5 / .pt,
+    size = pt2mm(fs_min),
     alpha = 1,
     inherit.aes = FALSE
   ) +
@@ -228,14 +229,14 @@ p2 <- df_change %>%
     fill = expression(asinh(Delta ~ count / 50))
   ) +
   theme(
-    axis.title = element_text(size = 5),
-    legend.title = element_text(size = 6, vjust = 1.05),
-    legend.text = element_text(size = 6),
+    axis.title = element_text(size = fs_min),
+    legend.title = element_text(size = fs_small, vjust = 1.05),
+    legend.text = element_text(size = fs_small),
     legend.position = "bottom",
     legend.title.position = "left",
     legend.text.position = "bottom",
     legend.margin = margin(),
-    strip.text = element_text(size = 6)
+    strip.text = element_text(size = fs_small)
   )
 
 # --- Combine and save ---

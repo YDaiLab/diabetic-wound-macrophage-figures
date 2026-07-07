@@ -1,5 +1,6 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
+source("assets/theme_embedding.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -10,7 +11,7 @@ library(ggarchery)
 library(colorspace)
 library(ggrastr)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 5))
+theme_set(theme_nature(base_size = fs_min))
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f1"
@@ -77,7 +78,7 @@ p1 <- dat2 %>%
     labels = scales::comma_format(),
     breaks = c(1, 10, 100, 1000)
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
@@ -86,13 +87,13 @@ p1 <- dat2 %>%
   theme(
     axis.title = element_blank(),
     axis.line = element_blank(),
-    legend.title = element_text(size = 5, vjust = 1),
+    legend.title = element_text(size = fs_min, vjust = 1),
     legend.position = "bottom",
     legend.title.position = "left",
     legend.justification = "left",
     legend.text.position = "bottom",
     legend.margin = margin(),
-    strip.text = ggtext::element_markdown(size = 5),
+    strip.text = ggtext::element_markdown(size = fs_min),
     legend.text = element_text(angle = 33, vjust = 1, hjust = 1),
     plot.margin = margin(0, 0, 0, 0),
     panel.spacing.x = unit(1, "lines")
@@ -123,11 +124,11 @@ p2 <- df2c %>%
       theme = theme(
         legend.key.width = unit(2, "lines"),
         legend.key.height = unit(0.3, "lines"),
-        legend.text = element_text(size = 5)
+        legend.text = element_text(size = fs_min)
       )
     )
   ) +
-  theme_dimred2(arrow = arrow) +
+  theme_embedding(arrow = arrow) +
   labs(
     x = expression("UMAP"[1]),
     y = expression("UMAP"[2]),
@@ -136,14 +137,14 @@ p2 <- df2c %>%
   theme(
     axis.title = element_blank(),
     axis.line = element_blank(),
-    legend.title = element_text(size = 5, vjust = 0.95),
+    legend.title = element_text(size = fs_min, vjust = 0.95),
     legend.position = "inside",
     legend.title.position = "left",
     legend.justification = c("left", "bottom"),
     legend.direction = "horizontal",
     legend.text.position = "bottom",
     legend.margin = margin(),
-    strip.text = ggtext::element_markdown(size = 5),
+    strip.text = ggtext::element_markdown(size = fs_min),
     plot.margin = margin(0, 0, 0, 0)
   )
 

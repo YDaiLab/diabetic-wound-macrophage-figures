@@ -1,5 +1,5 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -9,7 +9,7 @@ library(colorspace)
 library(ComplexHeatmap)
 library(circlize)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 ht_opt$annotation_use_raster <- TRUE
 options(ggrepel.max.overlaps = 6)
 # ----------------------------------------------------------------------
@@ -68,8 +68,8 @@ ht <- Heatmap(
   row_order = levels(df$clusterid),
   row_names_centered = TRUE,
   row_names_rot = 0,
-  row_names_gp = gpar(fontsize = 6.5),
-  column_names_gp = gpar(col = colors, fontsize = 5.75, fontface = faces),
+  row_names_gp = gpar(fontsize = fs_small),
+  column_names_gp = gpar(col = colors, fontsize = fs_small, fontface = faces),
   column_dend_gp = gpar(lwd = 0.6),
   column_dend_height = unit(0.5, "lines"),
   heatmap_legend_param = list(
@@ -79,8 +79,8 @@ ht <- Heatmap(
     direction = "horizontal",
     at = c(-400, 0, 400),
     labels = paste0("\n", c(-400, 0, 400), "%"),
-    title_gp = gpar(fontsize = 6, lineheight = 0.45),
-    labels_gp = gpar(fontsize = 6),
+    title_gp = gpar(fontsize = fs_small, lineheight = 0.45),
+    labels_gp = gpar(fontsize = fs_small),
     title_position = "lefttop"
   ),
   column_names_side = "bottom",

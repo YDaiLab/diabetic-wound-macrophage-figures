@@ -1,12 +1,12 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
 library(shadowtext)
 library(ggrepel)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 # ----------------------------------------------------------------------
 output_dir <- "figures/f5"
 source("make_figures/cfg.R")
@@ -109,7 +109,7 @@ p1 <- dat_n %>%
     ),
     nudge_x = ifelse(dat_n$factor == "Kdm1a", 25, 0),
     nudge_y = ifelse(dat_n$factor == "Cebpa", 7, 0),
-    size = 5 / .pt,
+    size = pt2mm(fs_min),
     segment.size = 0.25,
     max.overlaps = Inf,
     min.segment.length = 0,
@@ -123,9 +123,9 @@ p1 <- dat_n %>%
   ) +
   coord_fixed(clip = "off", xlim = lim_n, ylim = lim_n) +
   theme(
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = fs_min),
     axis.title = element_text(
-      size = 6,
+      size = fs_small,
       color = RColorBrewer::brewer.pal(8, "PiYG")[1]
     )
   )
@@ -165,7 +165,7 @@ p2 <- dat_p %>%
     ),
     nudge_x = ifelse(dat_p$factor == "Kdm1a", 25, 0),
     nudge_y = ifelse(dat_p$factor == "Cebpa", 5, 0),
-    size = 5 / .pt,
+    size = pt2mm(fs_min),
     segment.size = 0.25,
     max.overlaps = Inf,
     min.segment.length = 0,
@@ -179,9 +179,9 @@ p2 <- dat_p %>%
   ) +
   coord_fixed(clip = "off", xlim = lim_p, ylim = lim_p) +
   theme(
-    axis.text = element_text(size = 5),
+    axis.text = element_text(size = fs_min),
     axis.title = element_text(
-      size = 6,
+      size = fs_small,
       color = RColorBrewer::brewer.pal(8, "PiYG")[8]
     )
   )

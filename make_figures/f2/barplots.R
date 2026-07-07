@@ -1,10 +1,10 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f2"
@@ -44,7 +44,7 @@ pa <- df2 %>%
   geom_text(
     aes(label = nl),
     vjust = -0.25,
-    size = 6 / .pt
+    size = pt2mm(fs_small)
   ) +
   scale_fill_manual(values = cluster_pal) +
   scale_y_continuous(
@@ -57,7 +57,7 @@ pa <- df2 %>%
     y = "Count"
   ) +
   theme(
-    axis.text.y = element_text(size = 6),
+    axis.text.y = element_text(size = fs_small),
     strip.text = element_blank(),
     legend.position = "none"
   ) +
@@ -70,7 +70,7 @@ pb <- df2 %>%
   geom_text(
     aes(label = nl),
     vjust = -0.25,
-    size = 6 / .pt
+    size = pt2mm(fs_small)
   ) +
   scale_fill_manual(values = cluster_pal) +
   scale_y_continuous(
@@ -83,7 +83,7 @@ pb <- df2 %>%
     y = NULL
   ) +
   theme(
-    axis.text.y = element_text(size = 6),
+    axis.text.y = element_text(size = fs_small),
     strip.text = element_blank(),
     legend.position = "none"
   ) +
@@ -114,7 +114,7 @@ pc <- df1 %>%
     y = "Proportion"
   ) +
   theme(
-    axis.text.y = element_text(size = 6),
+    axis.text.y = element_text(size = fs_small),
     strip.text = element_blank(),
     legend.position = "none"
   )
@@ -138,7 +138,7 @@ pd <- df1 %>%
     y = NULL
   ) +
   theme(
-    axis.text.y = element_text(size = 6),
+    axis.text.y = element_text(size = fs_small),
     strip.text = element_blank(),
     legend.position = "none"
   )

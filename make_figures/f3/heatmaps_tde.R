@@ -1,5 +1,5 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -11,7 +11,7 @@ library(Lamian)
 library(ComplexHeatmap)
 library(circlize)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 ht_opt$annotation_use_raster <- TRUE
 
 # ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ top_anno <- HeatmapAnnotation(
   ),
   annotation_label = c("Pseudotime"),
   show_legend = FALSE,
-  annotation_name_gp = gpar(fontsize = 5.5),
+  annotation_name_gp = gpar(fontsize = fs_min),
   simple_anno_size = unit(0.8, "lines"),
   raster_quality = 5
 )
@@ -82,8 +82,8 @@ do_heatmap <- function(res, branch_name) {
     ),
     show_annotation_name = FALSE,
     annotation_legend_param = list(
-      title_gp = gpar(fontsize = 6),
-      labels_gp = gpar(fontsize = 6),
+      title_gp = gpar(fontsize = fs_small),
+      labels_gp = gpar(fontsize = fs_small),
       grid_height = unit(0.4, "lines"),
       grid_width = unit(0.4, "lines")
     ),
@@ -108,17 +108,17 @@ do_heatmap <- function(res, branch_name) {
       legend_height = unit(1.5, "lines"),
       at = c(-2, 0, 2),
       labels = paste0("  ", c(-2, 0, 2)),
-      title_gp = gpar(fontsize = 6),
-      labels_gp = gpar(fontsize = 6)
+      title_gp = gpar(fontsize = fs_small),
+      labels_gp = gpar(fontsize = fs_small)
     ),
     row_title = sprintf(
       "%s TDE genes",
       scales::comma(nrow(mat)),
       branch_name
     ),
-    row_title_gp = gpar(fontsize = 6.5),
+    row_title_gp = gpar(fontsize = fs_small),
     column_title = branches_names[branch_name],
-    column_title_gp = gpar(fontsize = 7)
+    column_title_gp = gpar(fontsize = fs_base)
   )
 }
 

@@ -1,5 +1,5 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
@@ -11,7 +11,7 @@ library(Lamian)
 library(ComplexHeatmap)
 library(circlize)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 ht_opt(
   COLUMN_ANNO_PADDING = unit(0.1, "mm"),
   ROW_ANNO_PADDING = unit(0.1, "mm"),
@@ -46,7 +46,7 @@ top_anno <- HeatmapAnnotation(
   ),
   annotation_label = c(""),
   show_legend = FALSE,
-  annotation_name_gp = gpar(fontsize = 5),
+  annotation_name_gp = gpar(fontsize = fs_min),
   simple_anno_size = unit(0.6, "lines"),
   raster_quality = 5
 )
@@ -105,9 +105,9 @@ do_heatmap <- function(res, branch_name, show_legend = TRUE) {
       "%s TDA TRs",
       scales::comma(nrow(mat))
     ),
-    row_title_gp = gpar(fontsize = 6),
+    row_title_gp = gpar(fontsize = fs_small),
     column_title = branches_names[branch_name],
-    column_title_gp = gpar(fontsize = 6),
+    column_title_gp = gpar(fontsize = fs_small),
     left_annotation = left_anno,
   )
 }
@@ -147,16 +147,16 @@ lgd_scaled <- Legend(
   legend_height = unit(1.5, "lines"),
   at = c(-2, 0, 2),
   labels = paste0("  ", c(-2, 0, 2)),
-  title_gp = gpar(fontsize = 6),
-  labels_gp = gpar(fontsize = 5)
+  title_gp = gpar(fontsize = fs_small),
+  labels_gp = gpar(fontsize = fs_min)
 )
 
 lgd_peak <- Legend(
   labels = c("Early", "Middle", "Late"),
   legend_gp = gpar(fill = RColorBrewer::brewer.pal(3, "YlOrRd")),
   title = "Peak\nactivity",
-  title_gp = gpar(fontsize = 6),
-  labels_gp = gpar(fontsize = 5),
+  title_gp = gpar(fontsize = fs_small),
+  labels_gp = gpar(fontsize = fs_min),
   grid_height = unit(0.4, "lines"),
   grid_width = unit(0.4, "lines")
 )
@@ -171,8 +171,8 @@ lgd_pseudotime <- Legend(
   legend_height = unit(1.5, "lines"),
   at = c(1000, 500, 0),
   labels = paste0("  ", c("Late", "Middle", "Early")),
-  title_gp = gpar(fontsize = 6),
-  labels_gp = gpar(fontsize = 5)
+  title_gp = gpar(fontsize = fs_small),
+  labels_gp = gpar(fontsize = fs_min)
 )
 
 lgd_all <- grid.grabExpr(draw(packLegend(

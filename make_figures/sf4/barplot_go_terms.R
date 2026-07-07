@@ -1,12 +1,12 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(patchwork)
 library(ggh4x)
 library(legendry)
 library(shadowtext)
 library(colorspace)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 7))
+theme_set(theme_nature())
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/sf4"
@@ -77,7 +77,7 @@ p <- df |>
     data = \(d) filter(d, is_placeholder),
     aes(label = "No significant terms", y = Term),
     x = 0.1,
-    hjust = 0.5, size = 5 / .pt, color = "grey50"
+    hjust = 0.5, size = pt2mm(fs_min), color = "grey50"
   ) +
   # Reference line at OR = 1 (no enrichment), only in non-placeholder panels
   geom_vline(
@@ -94,8 +94,8 @@ p <- df |>
     scales = "free",
     strip = strip_nested(
       text_x = list(
-        element_text(size = 7, hjust = 0.5),
-        element_text(size = 7, hjust = 0.5, margin = margin(t = 5, b = 5))
+        element_text(size = fs_base, hjust = 0.5),
+        element_text(size = fs_base, hjust = 0.5, margin = margin(t = 5, b = 5))
       ),
       by_layer_x = TRUE
     )
@@ -103,11 +103,11 @@ p <- df |>
   theme(
     ggh4x.facet.nestline = element_line(linewidth = 0.1),
     legend.position = "bottom",
-    axis.text.x = element_text(size = 5),
-    axis.text.y = element_text(size = 6),
+    axis.text.x = element_text(size = fs_min),
+    axis.text.y = element_text(size = fs_small),
     plot.margin = margin(r = 0.5, unit = "lines"),
     panel.spacing = unit(1, "lines"),
-    legend.title = element_text(size = 6, vjust = 0.9),
+    legend.title = element_text(size = fs_small, vjust = 0.9),
   ) +
   scale_fill_continuous_sequential(
     na.value = "gray80",

@@ -1,9 +1,9 @@
 library(tidyverse)
-library(ggbrandon)
+source("assets/theme_nature.R")
 library(ComplexHeatmap)
 library(circlize)
 
-theme_set(theme_brandon(base_line_size = 0.3, base_size = 6))
+theme_set(theme_nature(base_size = fs_small))
 
 # ----------------------------------------------------------------------
 output_dir <- "figures/f1"
