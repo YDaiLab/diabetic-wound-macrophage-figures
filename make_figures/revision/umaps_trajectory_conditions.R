@@ -101,7 +101,7 @@ edge_tbl_from_order <- function(res, d, det) {
     filter(!is.na(x), !is.na(xend))
 }
 
-# Compact colorbar geometry (matches umaps_trajectory_detection.R). The key
+# Compact colorbar geometry. The key
 # dimensions must live in the GUIDE's theme, not just the panel theme, or a bare
 # guide_colorbar() renders oversized.
 colorbar_theme <- theme(legend.key.height = unit(1.2, "lines"), legend.key.width = unit(0.35, "lines"))
