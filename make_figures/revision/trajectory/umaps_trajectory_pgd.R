@@ -27,7 +27,7 @@ theme_set(theme_nature())
 # Because top and bottom share coordinates, the joint structure is visibly the
 # same cells — nothing moved, only the labelling/trajectory changed.
 # ----------------------------------------------------------------------
-output_dir <- "figures/revision"
+output_dir <- "figures/revision/trajectory"
 source("make_figures/cfg.R")
 
 joint_res <- readRDS("box/results/lamian/infer_tree.rds")

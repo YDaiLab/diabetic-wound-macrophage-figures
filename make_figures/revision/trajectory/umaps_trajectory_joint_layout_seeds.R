@@ -9,33 +9,30 @@ library(ggrastr)
 
 theme_set(theme_nature())
 
-# Revision task T1 / R2-2 — Variant C, "shared-layout" alternative to
-# umaps_trajectory_pgd.R.
-#
-# Instead of giving each condition its own PGD embedding, this keeps the single
-# JOINT PGD layout and just subsets it to ND / DB, colouring each condition's
-# cells by its OWN condition-specific clusters and overlaying its OWN
-# (condition-specific) trajectory. The other condition's cells are drawn light
-# grey so the shared canvas stays legible.
-#
-#   Non-diabetic | Diabetic   (one row, joint PGD coordinates)
+# Revision R2-2 — draw sweep. The condition-specific (variant C) trajectory was
+# re-inferred under 10 raw k-means draws per condition
+# (box/results/revision/lamian_condpca_seeds_raw/{wt,db}/draw{1..10}). Draw the
+# shared-joint-layout view once PER DRAW so a good-looking consensus draw can be
+# picked by eye. Each panel is annotated with the draw's cluster count (k) and
+# its pseudotime concordance with the joint trajectory (rho, from raw_manifest.csv).
+#   figures/revision/trajectory/draws/joint_layout_draw{N}.png
 # ----------------------------------------------------------------------
-output_dir <- "figures/revision"
+output_dir <- "figures/revision/trajectory/draws"
 source("make_figures/cfg.R")
 
-df <- load_df(pgd = TRUE) # umap_1/umap_2 (JOINT PGD), clusterid (joint), condition, Row.names
-
+draws <- 1:10
+draw_dir <- "box/results/revision/lamian_condpca_seeds_raw"
+manifest <- read_csv(file.path(draw_dir, "raw_manifest.csv"), show_col_types = FALSE)
 cond_meta <- tribble(
-  ~cond, ~condition,      ~label,          ~tree,
-  "wt",  "Non-diabetic",  "Non-diabetic",  "box/results/revision/lamian_condpca/wt/infer_tree.rds",
-  "db",  "Diabetic",      "Diabetic",      "box/results/revision/lamian_condpca/db/infer_tree.rds"
+  ~cond, ~condition,      ~label,
+  "wt",  "Non-diabetic",  "Non-diabetic",
+  "db",  "Diabetic",      "Diabetic"
 )
 # ----------------------------------------------------------------------
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
-# Condition-specific trajectory placed on the joint layout: branch cluster
-# sequences from names(res$order) (already origin-first, so source->target flows
-# early->late), nodes at the median joint-PGD coord of each cluster's cells.
+df <- load_df(pgd = TRUE) # joint PGD layout + condition + Row.names
+
 edge_tbl <- function(res, cell_node, layout) {
   seqs <- lapply(names(res$order), function(nm) as.integer(str_extract_all(nm, "[0-9]+")[[1]]))
   edges <- bind_rows(lapply(seqs, function(v) {
@@ -87,32 +84,42 @@ labels_layer <- function(label_df) {
   )
 }
 
-panels <- pmap(cond_meta, function(cond, condition, label, tree) {
+cond_panel <- function(condition, label, tree, subtitle) {
   res <- readRDS(tree)
   cn <- enframe(res$clusterid, name = "cell", value = "node") %>%
     mutate(node = as.integer(as.character(node)))
-
   bg <- df %>% filter(condition != !!condition)
   fg <- df %>%
     filter(condition == !!condition) %>%
     left_join(cn, by = c("Row.names" = "cell"))
   fg_layout <- fg %>% transmute(cell = Row.names, umap_1, umap_2)
-
   pal <- setNames(scales::hue_pal()(n_distinct(cn$node)), sort(unique(cn$node)))
 
   ggplot(mapping = aes(umap_1, umap_2)) +
-    rasterise(geom_point(data = bg, color = "grey88", stroke = 0, size = 0.35), dpi = 900) +
-    rasterise(geom_point(aes(color = factor(node)), fg, stroke = 0, size = 0.4), dpi = 900) +
+    rasterise(geom_point(data = bg, color = "grey88", stroke = 0, size = 0.35), dpi = 300) +
+    rasterise(geom_point(aes(color = factor(node)), fg, stroke = 0, size = 0.4), dpi = 300) +
     scale_color_manual(values = pal, na.value = "grey85", guide = "none") +
     backbone(edge_tbl(res, cn, fg_layout)) +
     labels_layer(node_labels(cn, fg_layout)) +
-    labs(title = label, subtitle = "condition-specific clusters + trajectory",
+    labs(title = label, subtitle = subtitle,
          x = expression("UMAP"[1]), y = expression("UMAP"[2])) +
     theme_panel
-})
+}
 
-fig <- (panels[[1]] + panels[[2]]) +
-  plot_annotation(tag_levels = "a") # plot.tag styling inherited from theme_nature()
-
-# 124 mm wide (4.882 in); one row of square panels.
-save_figure(output_dir, "umaps_trajectory_joint_layout", plot = fig, width = 4.882, height = 2.7)
+for (d in draws) {
+  panels <- pmap(cond_meta, function(cond, condition, label) {
+    m <- manifest %>% filter(condition == cond, draw == d)
+    subtitle <- sprintf("k = %d   ρ = %.2f", m$n_clusters[1], m$rho_joint[1])
+    cond_panel(condition, label,
+               file.path(draw_dir, cond, paste0("draw", d), "infer_tree.rds"),
+               subtitle)
+  })
+  fig <- (panels[[1]] + panels[[2]]) +
+    plot_annotation(
+      title = sprintf("draw %d", d), tag_levels = "a",
+      theme = theme(plot.title = element_text(size = fs_base, face = "bold", hjust = 0.5))
+    )
+  ggsave(file.path(output_dir, sprintf("joint_layout_draw%02d.png", d)),
+         fig, width = 4.882, height = 2.8, dpi = 300)
+  message("draw ", d, " done")
+}

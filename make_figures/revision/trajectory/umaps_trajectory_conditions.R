@@ -37,7 +37,7 @@ theme_set(theme_nature())
 # yields ZERO edges for some trees. Detection is then matched onto those edges
 # by parsing the detection.rate rownames (same "c(a,b)" / "a:b" grammar).
 # ----------------------------------------------------------------------
-output_dir <- "figures/revision"
+output_dir <- "figures/revision/trajectory"
 source("make_figures/cfg.R")
 
 joint_res_file <- "box/results/lamian/infer_tree.rds"
