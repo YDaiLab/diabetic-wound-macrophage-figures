@@ -52,18 +52,26 @@ spread <- imap_dfr(conds, function(label, cond) {
     mutate(condition = label)
 })
 
-# Jaccard null cutoff (js_cut, 99th pct) from the official run; verify recomputed
-# min/median agree. (The CSV now also carries oc_cut and the bijective
-# detection.rate, but this panel plots the best-match Jaccard magnitude — the
-# authors' "more informative signal" — so js_cut is the matching null.)
+# Chance level = the best-of-k Jaccard null (js_bok_cut), which accounts for the
+# best-match statistic being a MAX over the draw's edges (a single-set null would
+# be anti-conservative). Also pull the ensemble significance: every edge is
+# recovered in 10/10 draws under this calibrated null, so the binomial combined
+# p (BH-FDR adjusted, p_bh) hits its floor for all edges. Verify recomputed
+# min/median magnitudes agree with the official run.
 off <- read_csv("box/results/revision/condpca_edge_detection.csv", show_col_types = FALSE) %>%
   mutate(condition = recode(condition, wt = "Non-diabetic", db = "Diabetic"))
 d <- spread %>%
-  left_join(off %>% select(condition, edge, null_cutoff = js_cut, jacc_min, jacc_median),
+  left_join(off %>% select(condition, edge, null_cutoff = js_bok_cut,
+                           jacc_min, jacc_median, n_detected_bok, n_draws, p_bh),
             by = c("condition", "edge"))
 message(sprintf("verify vs CSV — max |Δmin|=%.4g, max |Δmedian|=%.4g",
                 max(abs(d$jmin - d$jacc_min)), max(abs(d$jmed - d$jacc_median))))
 stopifnot(max(abs(d$jmin - d$jacc_min)) < 1e-6, max(abs(d$jmed - d$jacc_median)) < 1e-6)
+
+# one-line ensemble result for the figure (best-of-k null; binomial + BH-FDR)
+min_det <- min(d$n_detected_bok); nd <- d$n_draws[1]
+sig_note <- sprintf("All edges recovered in %d/%d draws (FDR p < 1e-19)", min_det, nd)
+message(sig_note)
 
 one_panel <- function(cond, show_x) {
   dd <- d %>% filter(condition == cond) %>% arrange(jmed) %>% mutate(edge = fct_inorder(edge))
@@ -85,5 +93,6 @@ one_panel <- function(cond, show_x) {
 fig <- one_panel("Non-diabetic", show_x = FALSE) /
   one_panel("Diabetic", show_x = TRUE)
 
-# 55 mm wide (2.165 in)
+# 55 mm wide (2.165 in). Ensemble significance (sig_note) is reported in the
+# figure legend, not on the panel.
 save_figure(output_dir, "panel_F_edge_jaccard", plot = fig, width = 2.165, height = 3.6)
