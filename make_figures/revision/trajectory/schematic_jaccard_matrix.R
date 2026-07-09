@@ -64,7 +64,7 @@ p <- ggplot(mat, aes(draw, joint)) +
   ) +
   scale_x_discrete(position = "top") +
   coord_fixed(expand = FALSE) +
-  labs(x = "draw edges", y = "joint edges") +
+  labs(x = "run edges", y = "joint edges") +
   theme(
     axis.text.x = element_text(size = fs_min, angle = 90, hjust = 0, vjust = 0.5),
     axis.text.y = element_text(size = fs_min),

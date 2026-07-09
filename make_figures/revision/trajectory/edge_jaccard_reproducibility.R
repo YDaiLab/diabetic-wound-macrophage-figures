@@ -53,24 +53,29 @@ spread <- imap_dfr(conds, function(label, cond) {
 })
 
 # Chance level = the best-of-k Jaccard null (js_bok_cut), which accounts for the
-# best-match statistic being a MAX over the draw's edges (a single-set null would
-# be anti-conservative). Also pull the ensemble significance: every edge is
-# recovered in 10/10 draws under this calibrated null, so the binomial combined
-# p (BH-FDR adjusted, p_bh) hits its floor for all edges. Verify recomputed
-# min/median magnitudes agree with the official run.
+# best-match statistic being a MAX over a run's edges (a single-set null would be
+# anti-conservative). Ensemble significance: for each run, the best-match exceeds
+# this calibrated null (an exact per-run permutation p); every edge clears it in
+# every run, and the worst-run p (BH-corrected across edges, p_bh) is the reported
+# significance. The runs are repeated stochastic re-inferences, not independent
+# replicates, so we summarise by the worst run rather than multiplying. Verify
+# recomputed min/median magnitudes agree with the official run.
 off <- read_csv("box/results/revision/condpca_edge_detection.csv", show_col_types = FALSE) %>%
   mutate(condition = recode(condition, wt = "Non-diabetic", db = "Diabetic"))
 d <- spread %>%
   left_join(off %>% select(condition, edge, null_cutoff = js_bok_cut,
-                           jacc_min, jacc_median, n_detected_bok, n_draws, p_bh),
+                           jacc_min, jacc_median, n_runs_recovered, n_runs, p_bh),
             by = c("condition", "edge"))
 message(sprintf("verify vs CSV — max |Δmin|=%.4g, max |Δmedian|=%.4g",
                 max(abs(d$jmin - d$jacc_min)), max(abs(d$jmed - d$jacc_median))))
 stopifnot(max(abs(d$jmin - d$jacc_min)) < 1e-6, max(abs(d$jmed - d$jacc_median)) < 1e-6)
 
-# one-line ensemble result for the figure (best-of-k null; binomial + BH-FDR)
-min_det <- min(d$n_detected_bok); nd <- d$n_draws[1]
-sig_note <- sprintf("All edges recovered in %d/%d draws (FDR p < 1e-19)", min_det, nd)
+# one-line ensemble result for the figure legend (best-of-k permutation null;
+# worst-run p, BH-corrected across edges)
+min_rec <- min(d$n_runs_recovered); nr <- d$n_runs[1]
+pbound <- 10^ceiling(log10(max(d$p_bh)))
+sig_note <- sprintf("Every edge recovered above chance in all %d/%d runs (worst-run p < %g, BH across edges)",
+                    min_rec, nr, pbound)
 message(sig_note)
 
 one_panel <- function(cond, show_x) {

@@ -81,7 +81,7 @@ panel <- function(cond, condition, abbr, d) {
     backbone_draw(edge_tbl(res, cn_draw, layout)) +
     geom_shadowtext(aes(umap_1, umap_2, label = clusterid), node_labels(cn_joint, layout),
                     color = "#000", bg.color = "#fff", size = pt2mm(fs_min - 1)) +
-    labs(title = sprintf("%s draw %d", abbr, d)) +
+    labs(title = sprintf("%s run %d", abbr, d)) +
     c(theme_embedding(arrow = arrow), list(theme(
       plot.title = element_text(size = fs_min, hjust = 0.5),
       axis.title = element_blank(), axis.line = element_blank(),
