@@ -5,13 +5,15 @@ table_base_path <- file.path(
   "Brandon Lukas",
   "Koh",
   "Manuscript and Figures",
-  "Supplementary Data"
+  "NPJ files",
+  "Supplementary Information"
 )
 
-get_table_path <- function(table_num, filename) {
+# kind = "Data" for spreadsheet-scale files, "Table" for page-formatted ones
+get_table_path <- function(table_num, filename, kind = "Data") {
   name <- tools::file_path_sans_ext(filename)
   ext <- tools::file_ext(filename)
-  out <- sprintf("Supplementary_Data_%d_%s.%s", table_num, name, ext)
+  out <- sprintf("Supplementary_%s_%d_%s.%s", kind, table_num, name, ext)
   path <- file.path(table_base_path, out)
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   path

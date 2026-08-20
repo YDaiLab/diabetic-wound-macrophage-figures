@@ -12,7 +12,9 @@ Output:
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))  # moma root -> local pgdiffusion
+sys.path.insert(
+    0, str(Path(__file__).resolve().parents[3])
+)  # moma root (src/revision/trajectory/ -> moma) -> local pgdiffusion
 
 import pandas as pd
 import scanpy as sc
@@ -37,7 +39,8 @@ for cond in ["wt", "db"]:
         a = adata_all[cells].copy()
         X = pca.loc[a.obs_names].to_numpy(dtype="float32")
         trajectories = {
-            b: g.sort_values("pos")["cell"].tolist() for b, g in orders.groupby("branch")
+            b: g.sort_values("pos")["cell"].tolist()
+            for b, g in orders.groupby("branch")
         }
 
         edge_index = pgd.build_graph(a, trajectories, neighbors_per_side=50)
