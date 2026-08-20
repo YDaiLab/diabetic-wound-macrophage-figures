@@ -18,7 +18,7 @@ CellOracle perturbation simulation — lives in
 | `make_tables/` | `mk_s1.R`–`mk_s8.R`, one per Supplementary Data file. |
 | `src/` | Numbered post-processing steps that turn pipeline output into the tidy tables the figure scripts read. |
 | `src/revision/` | Analyses added during revision: trajectory reproducibility, PAGA cross-check, cluster occupancy. |
-| `pgdiffusion/` | Vendored copy of [PGDiffusion](https://github.com/brandonlukas/pgdiffusion), pinned to the exact version the published analysis ran against. See `pgdiffusion/PROVENANCE.md`. |
+| `pgdiffusion/` | Pseudotime Graph Diffusion, pinned to the exact version the published analysis ran against. Originally a standalone repository, now kept here. See `pgdiffusion/PROVENANCE.md`. |
 | `assets/` | Shared ggplot theme, embedding theme, and the cluster colour palette. |
 
 ## Running

@@ -7,7 +7,8 @@ embedding behind the PGD UMAP layout.
 
 ## Source
 
-- Upstream: https://github.com/brandonlukas/pgdiffusion
+- Upstream: `github.com/brandonlukas/pgdiffusion` (no longer exists; this copy is
+  now the only record of the version the published analysis used)
 - Vendored state: commit `2a0762c` **plus the then-uncommitted working-tree
   version of `diffuse.py`** (the state moma was actually run against).
 - Vendored on 2026-07-07.
