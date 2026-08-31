@@ -1,14 +1,14 @@
-# moma
+# diabetic-wound-macrophage-figures
 
 Figures, supplementary data files, and the Pseudotime Graph Diffusion (PGD)
 embedding for *Transcriptional regulators predicted to induce macrophage
 dysregulation during impaired wound healing in diabetic mice*.
 
 This repository turns the outputs of the analysis pipeline into the panels and
-tables that appear in the manuscript. The pipeline itself — network
-construction, BITFAM activity inference, Lamian trajectory analysis, and
-CellOracle perturbation simulation — lives in
-[macrophages](https://github.com/brandonlukas/macrophages).
+tables that appear in the manuscript. The pipeline itself, covering network
+construction, BITFAM activity inference, Lamian trajectory analysis and
+CellOracle perturbation simulation, lives in
+[diabetic-wound-macrophage-grn](https://github.com/YDaiLab/diabetic-wound-macrophage-grn).
 
 ## Layout
 
